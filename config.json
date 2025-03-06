@@ -22,5 +22,5 @@
     "testing": {
         "regression": {}
     },
-    "release_notes": "Testing second CICD for Loss Run app - changed a prompt in Build to see if it will go thru without publishing the app"
+    "release_notes": "Added logic to clean spaces vs N/A, amounts, Closed vs Open"
 }
