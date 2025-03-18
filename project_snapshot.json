@@ -43,7 +43,7 @@
                                 {
                                     "data_type": "LINE",
                                     "name": "previous_line",
-                                    "value": "claims data list@0"
+                                    "value": "Loss Run Table@0"
                                 }
                             ],
                             "function_id": 4545,
@@ -52,10 +52,10 @@
                             "prompt": null
                         }
                     ],
-                    "model_type": "DEFAULT",
-                    "name": "claims data list",
+                    "model_type": "ADVANCED",
+                    "name": "Loss Run Table",
                     "position": 0,
-                    "prompt": "claims data list",
+                    "prompt": "Loss Run Table",
                     "prompt_schema": [
                         {
                             "description": "The date when the loss occurred. Extract from the filed or column labeled \"Date of Loss\" or \"Loss Date\" or \"DOL\" or similar.",
@@ -99,6 +99,90 @@
                         }
                     ],
                     "prompt_type": "basic"
+                },
+                {
+                    "data_type": "TEXT",
+                    "description": "an insurer is the entity or company that provides insurance coverage. The insurer assumes the financial risk associated with specified perils, losses, or damages in exchange for premium payments made by the insured.If not found then take it from logo",
+                    "field_id": "498233",
+                    "lines": [
+                        {
+                            "function_args": [],
+                            "function_id": null,
+                            "line_type": "PROMPT",
+                            "native_fn_name": null,
+                            "prompt": "Only display the full company name"
+                        }
+                    ],
+                    "model_type": "DEFAULT",
+                    "name": "Insurer",
+                    "position": 1,
+                    "prompt": "Insurer",
+                    "prompt_schema": null,
+                    "prompt_type": "basic"
+                },
+                {
+                    "data_type": "TEXT",
+                    "description": "insured is the person/company who is covered against risk",
+                    "field_id": "498234",
+                    "lines": [],
+                    "model_type": "DEFAULT",
+                    "name": "Insured Party",
+                    "position": 2,
+                    "prompt": "Insured Party",
+                    "prompt_schema": null,
+                    "prompt_type": "basic"
+                },
+                {
+                    "data_type": "TEXT",
+                    "description": "The date of reporting the Claims History. This is usually the same as the date of preparing the presentation.date will be present in the bottom or top of the document. If the run date is present then take that date.",
+                    "field_id": "498235",
+                    "lines": [
+                        {
+                            "function_args": [],
+                            "function_id": null,
+                            "line_type": "PROMPT",
+                            "native_fn_name": null,
+                            "prompt": "Only display the date in MM/DD/YYYY format"
+                        }
+                    ],
+                    "model_type": "DEFAULT",
+                    "name": "Run Date",
+                    "position": 3,
+                    "prompt": "The date of reporting the Claims History. This is usually the same as the date of preparing the presentation.date will be present in the bottom or top of the document. If the run date is present then take that date.",
+                    "prompt_schema": null,
+                    "prompt_type": "advanced"
+                },
+                {
+                    "data_type": "TEXT",
+                    "description": "The total count of individual claims reported by the insured under a insurance policy. Each claim represents a request for compensation or benefits due to a covered event or loss.Also The number of unique claims, excluding duplicates or related claims that may be grouped together.If no claim is mention in the document then take 0.",
+                    "field_id": "498237",
+                    "lines": [
+                        {
+                            "function_args": [],
+                            "function_id": null,
+                            "line_type": "PROMPT",
+                            "native_fn_name": null,
+                            "prompt": "show only integer value"
+                        }
+                    ],
+                    "model_type": "DEFAULT",
+                    "name": "Number of Claims",
+                    "position": 4,
+                    "prompt": "The total count of individual claims reported by the insured under a insurance policy. Each claim represents a request for compensation or benefits due to a covered event or loss.Also The number of unique claims, excluding duplicates or related claims that may be grouped together.If no claim is mention in the document then take 0.",
+                    "prompt_schema": null,
+                    "prompt_type": "advanced"
+                },
+                {
+                    "data_type": "TEXT",
+                    "description": "Extract the start and end dates of the policy period in MM/DD/YYYY format, separated by a hyphen. Take the earliest date as the start date and the latest date as the end date from the entire document.Remove all the text.",
+                    "field_id": "498238",
+                    "lines": [],
+                    "model_type": "DEFAULT",
+                    "name": "Claim Period",
+                    "position": 5,
+                    "prompt": "Extract the start and end dates of the policy period in MM/DD/YYYY format, separated by a hyphen. Take the earliest date as the start date and the latest date as the end date from the entire document.Remove all the text.",
+                    "prompt_schema": null,
+                    "prompt_type": "advanced"
                 }
             ]
         },
@@ -114,7 +198,7 @@
                 {
                     "data_type": "LINE",
                     "name": "previous_line",
-                    "value": "claims data list@0"
+                    "value": "Loss Run Table@0"
                 }
             ],
             "code": "\n\ndef unnamed_custom_function(previous_line, context = {}, keys = {}, **kwargs):\n\ttry:\n\t  import json\n\t\n\t  data = json.loads(previous_line)\n\t  fields = [\"Loss Date\", \"Claim Location\", \"Claim Description\", \"Peril Type\", \"Coverage Type\", \"Claim Status\", \"Paid Loss\", \"Reserve\", \"Expense\", \"Incurred Loss\"]\n\t  for record in data:\n\t    new_rec = {}\n\t    for field in fields:\n\t      if field not in record.keys() or record[field] == None or record[field].strip() in [\"\", \"N/A\", \"null\"]:\n\t        new_rec[field] = \"\"\n\t      else:\n\t        value = record[field]\n\t\n\t        if field == \"Loss Date\":\n\t          value = value.replace(\"-\", \"/\")\n\t        elif field in [\"Paid Loss\", \"Reserve\", \"Expense\", \"Incurred Loss\"]:\n\t          value = value.replace('$', '').replace(',', '')\n\t          value = value.lower().replace('c', '0')\n\t          try:\n\t            value = float(value)\n\t            value = f\"{value:.2f}\"\n\t          except:\n\t            do_nothing = 1\n\t        elif field == \"Claim Status\":\n\t          if \"C\" in value:\n\t            value = \"Closed\"\n\t          elif \"O\" in value:\n\t            value = \"Open\"\n\t\n\t        new_rec[field] = value\n\t\n\t    record.clear()\n\t    record.update(new_rec)\n\t\n\t  return json.dumps(data, indent=4)\n\texcept:\n\t  return previous_line\n\t",
@@ -130,7 +214,46 @@
             "type": "REFINER"
         }
     },
-    "project_validations": [],
+    "project_validations": [
+        {
+            "affected_fields": [
+                498233
+            ],
+            "alert_level": "FAILURE",
+            "created_at": 1742304266000,
+            "description": "",
+            "id": 8205,
+            "input_fields": [
+                498233
+            ],
+            "name": "Rule 1",
+            "params": {
+                "confidence_threshold": 0.85
+            },
+            "scope": "FIELD",
+            "type": "OCR_CONFIDENCE",
+            "updated_at": 1742304266000
+        },
+        {
+            "affected_fields": [
+                498234
+            ],
+            "alert_level": "FAILURE",
+            "created_at": 1742304359000,
+            "description": "",
+            "id": 8206,
+            "input_fields": [
+                498234
+            ],
+            "name": "Rule 2",
+            "params": {
+                "confidence_threshold": 0.95
+            },
+            "scope": "FIELD",
+            "type": "OCR_CONFIDENCE",
+            "updated_at": 1742304359000
+        }
+    ],
     "reader_profile": {
         "createdBy": "",
         "createdOn": 1728457573954,

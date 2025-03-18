@@ -1,4 +1,43 @@
 {
-    "last_updated": 0,
-    "rules": []
+    "last_updated": 1742304359000,
+    "rules": [
+        {
+            "affected_fields": [
+                498233
+            ],
+            "alert_level": "FAILURE",
+            "created_at": 1742304266000,
+            "description": "",
+            "id": 8205,
+            "input_fields": [
+                498233
+            ],
+            "name": "Rule 1",
+            "params": {
+                "confidence_threshold": 0.85
+            },
+            "scope": "FIELD",
+            "type": "OCR_CONFIDENCE",
+            "updated_at": 1742304266000
+        },
+        {
+            "affected_fields": [
+                498234
+            ],
+            "alert_level": "FAILURE",
+            "created_at": 1742304359000,
+            "description": "",
+            "id": 8206,
+            "input_fields": [
+                498234
+            ],
+            "name": "Rule 2",
+            "params": {
+                "confidence_threshold": 0.95
+            },
+            "scope": "FIELD",
+            "type": "OCR_CONFIDENCE",
+            "updated_at": 1742304359000
+        }
+    ]
 }

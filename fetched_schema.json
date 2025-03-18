@@ -11,7 +11,7 @@
                             {
                                 "data_type": "LINE",
                                 "name": "previous_line",
-                                "value": "claims data list@0"
+                                "value": "Loss Run Table@0"
                             }
                         ],
                         "function_id": 4545,
@@ -20,10 +20,10 @@
                         "prompt": null
                     }
                 ],
-                "model_type": "DEFAULT",
-                "name": "claims data list",
+                "model_type": "ADVANCED",
+                "name": "Loss Run Table",
                 "position": 0,
-                "prompt": "claims data list",
+                "prompt": "Loss Run Table",
                 "prompt_schema": [
                     {
                         "description": "The date when the loss occurred. Extract from the filed or column labeled \"Date of Loss\" or \"Loss Date\" or \"DOL\" or similar.",
@@ -67,6 +67,85 @@
                     }
                 ],
                 "prompt_type": "basic"
+            },
+            "498233": {
+                "data_type": "TEXT",
+                "description": "an insurer is the entity or company that provides insurance coverage. The insurer assumes the financial risk associated with specified perils, losses, or damages in exchange for premium payments made by the insured.If not found then take it from logo",
+                "lines": [
+                    {
+                        "function_args": [],
+                        "function_id": null,
+                        "line_type": "PROMPT",
+                        "native_fn_name": null,
+                        "prompt": "Only display the full company name"
+                    }
+                ],
+                "model_type": "DEFAULT",
+                "name": "Insurer",
+                "position": 1,
+                "prompt": "Insurer",
+                "prompt_schema": null,
+                "prompt_type": "basic"
+            },
+            "498234": {
+                "data_type": "TEXT",
+                "description": "insured is the person/company who is covered against risk",
+                "lines": [],
+                "model_type": "DEFAULT",
+                "name": "Insured Party",
+                "position": 2,
+                "prompt": "Insured Party",
+                "prompt_schema": null,
+                "prompt_type": "basic"
+            },
+            "498235": {
+                "data_type": "TEXT",
+                "description": "The date of reporting the Claims History. This is usually the same as the date of preparing the presentation.date will be present in the bottom or top of the document. If the run date is present then take that date.",
+                "lines": [
+                    {
+                        "function_args": [],
+                        "function_id": null,
+                        "line_type": "PROMPT",
+                        "native_fn_name": null,
+                        "prompt": "Only display the date in MM/DD/YYYY format"
+                    }
+                ],
+                "model_type": "DEFAULT",
+                "name": "Run Date",
+                "position": 3,
+                "prompt": "The date of reporting the Claims History. This is usually the same as the date of preparing the presentation.date will be present in the bottom or top of the document. If the run date is present then take that date.",
+                "prompt_schema": null,
+                "prompt_type": "advanced"
+            },
+            "498237": {
+                "data_type": "TEXT",
+                "description": "The total count of individual claims reported by the insured under a insurance policy. Each claim represents a request for compensation or benefits due to a covered event or loss.Also The number of unique claims, excluding duplicates or related claims that may be grouped together.If no claim is mention in the document then take 0.",
+                "lines": [
+                    {
+                        "function_args": [],
+                        "function_id": null,
+                        "line_type": "PROMPT",
+                        "native_fn_name": null,
+                        "prompt": "show only integer value"
+                    }
+                ],
+                "model_type": "DEFAULT",
+                "name": "Number of Claims",
+                "position": 4,
+                "prompt": "The total count of individual claims reported by the insured under a insurance policy. Each claim represents a request for compensation or benefits due to a covered event or loss.Also The number of unique claims, excluding duplicates or related claims that may be grouped together.If no claim is mention in the document then take 0.",
+                "prompt_schema": null,
+                "prompt_type": "advanced"
+            },
+            "498238": {
+                "data_type": "TEXT",
+                "description": "Extract the start and end dates of the policy period in MM/DD/YYYY format, separated by a hyphen. Take the earliest date as the start date and the latest date as the end date from the entire document.Remove all the text.",
+                "lines": [],
+                "model_type": "DEFAULT",
+                "name": "Claim Period",
+                "position": 5,
+                "prompt": "Extract the start and end dates of the policy period in MM/DD/YYYY format, separated by a hyphen. Take the earliest date as the start date and the latest date as the end date from the entire document.Remove all the text.",
+                "prompt_schema": null,
+                "prompt_type": "advanced"
             }
         },
         "name": "Loss Run"
@@ -76,6 +155,6 @@
         "fields": {},
         "name": "Other"
     },
-    "last_edited_at": "1741296944000",
+    "last_edited_at": "1742304641000",
     "last_edited_class_at": "1723622782000"
 }

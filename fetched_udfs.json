@@ -117,7 +117,7 @@
             {
                 "data_type": "LINE",
                 "name": "previous_line",
-                "value": "claims data list@0"
+                "value": "Loss Run Table@0"
             }
         ],
         "code": "\ttry:\n\t  import json\n\t\n\t  data = json.loads(previous_line)\n\t  fields = [\"Loss Date\", \"Claim Location\", \"Claim Description\", \"Peril Type\", \"Coverage Type\", \"Claim Status\", \"Paid Loss\", \"Reserve\", \"Expense\", \"Incurred Loss\"]\n\t  for record in data:\n\t    new_rec = {}\n\t    for field in fields:\n\t      if field not in record.keys() or record[field] == None or record[field].strip() in [\"\", \"N/A\", \"null\"]:\n\t        new_rec[field] = \"\"\n\t      else:\n\t        value = record[field]\n\t\n\t        if field == \"Loss Date\":\n\t          value = value.replace(\"-\", \"/\")\n\t        elif field in [\"Paid Loss\", \"Reserve\", \"Expense\", \"Incurred Loss\"]:\n\t          value = value.replace('$', '').replace(',', '')\n\t          value = value.lower().replace('c', '0')\n\t          try:\n\t            value = float(value)\n\t            value = f\"{value:.2f}\"\n\t          except:\n\t            do_nothing = 1\n\t        elif field == \"Claim Status\":\n\t          if \"C\" in value:\n\t            value = \"Closed\"\n\t          elif \"O\" in value:\n\t            value = \"Open\"\n\t\n\t        new_rec[field] = value\n\t\n\t    record.clear()\n\t    record.update(new_rec)\n\t\n\t  return json.dumps(data, indent=4)\n\texcept:\n\t  return previous_line\n\t",
