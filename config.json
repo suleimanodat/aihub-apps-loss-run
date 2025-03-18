@@ -22,5 +22,5 @@
     "testing": {
         "regression": {}
     },
-    "release_notes": "Updated .github/workflows for the updated CI/CD workflows"
+    "release_notes": "Snapshot for published app v1 (84% accuracy on the loss run table, added extra fields: insurer, run date etc"
 }
