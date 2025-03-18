@@ -62,6 +62,10 @@
                         "name": "Expense"
                     },
                     {
+                        "description": "Any amount that has been recovered through Salvage or Subrogation",
+                        "name": "Recovery"
+                    },
+                    {
                         "description": "The total incurred loss amount. Extract from the field or column labeled \"Incurred Loss\" or \"Incurred Losses\" or similar.",
                         "name": "Incurred Loss"
                     }
@@ -155,6 +159,6 @@
         "fields": {},
         "name": "Other"
     },
-    "last_edited_at": "1742304641000",
+    "last_edited_at": "1742305622000",
     "last_edited_class_at": "1723622782000"
 }
